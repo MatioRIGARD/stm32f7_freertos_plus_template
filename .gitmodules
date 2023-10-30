@@ -1,0 +1,12 @@
+[submodule "Drivers/stm32f7xx_hal_driver"]
+	path = Drivers/stm32f7xx_hal_driver
+	url = git@github.com:STMicroelectronics/stm32f7xx_hal_driver.git
+[submodule "FreeRTOS"]
+	path = FreeRTOS
+	url = git@github.com:FreeRTOS/FreeRTOS.git
+[submodule "Drivers/cmsis_device_f7"]
+	path = Drivers/cmsis_device_f7
+	url = git@github.com:STMicroelectronics/cmsis_device_f7.git
+[submodule "Drivers/cmsis_core"]
+	path = Drivers/cmsis_core
+	url = git@github.com:STMicroelectronics/cmsis_core.git
