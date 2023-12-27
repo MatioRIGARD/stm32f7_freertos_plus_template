@@ -2,6 +2,25 @@
 #include "string.h"
 #include "cmsis_os.h"
 #include "task.h"
+#include "FreeRTOS_IP.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "queue.h"
+
+#include "FreeRTOS_IP.h"
+#include "FreeRTOS_Sockets.h"
+#include "FreeRTOS_DHCP.h"
+#include "NetworkBufferManagement.h"
+#include "NetworkInterface.h"
+#include "IPTraceMacroDefaults.h"
+
+#include "FreeRTOSConfig.h"
+#include "FreeRTOSIPConfig.h"
+
+#include <stdarg.h>
+
 
 // HAL
 UART_HandleTypeDef huart1;
@@ -30,6 +49,19 @@ const osThreadAttr_t task2_attributes = {
 	.priority = (osPriority_t)osPriorityNormal,
 };
 
+/* Define the network addressing.  These parameters will be used if either
+ipconfigUDE_DHCP is 0 or if ipconfigUSE_DHCP is 1 but DHCP auto configuration
+failed. */
+static const uint8_t ucIPAddress[ 4 ] = { 192, 168, 0, 200 };
+static const uint8_t ucNetMask[ 4 ] = { 255, 255, 255, 255 };
+static const uint8_t ucGatewayAddress[ 4 ] = { 192, 168, 0, 1 };
+
+/* The following is the address of an OpenDNS server. */
+static const uint8_t ucDNSServerAddress[ 4 ] = { 208, 67, 222, 222 };
+
+/* The MAC address array is not declared const as the MAC address will normally
+be read from an EEPROM and not hard coded (in real deployed applications).*/
+static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
 
 /************************/
 /********* MAIN *********/
@@ -49,10 +81,24 @@ int main(void)
 	task1Handle = osThreadNew(StartTask1, NULL, &task1_attributes);
 	task2Handle = osThreadNew(StartTask2, NULL, &task2_attributes);
 
+	// FreeRTOS Plus TCP/IP
+	__HAL_RCC_ETHMAC_CLK_ENABLE();
+    __HAL_RCC_ETHMACTX_CLK_ENABLE();
+    __HAL_RCC_ETHMACRX_CLK_ENABLE();
+	
+
+
+    /* Initialise the TCP/IP stack. */
+    FreeRTOS_IPInit( ucIPAddress,
+                     ucNetMask,
+                     ucGatewayAddress,
+                     ucDNSServerAddress,
+                     ucMACAddress );
+
+	// Start
 	vTaskStartScheduler();
 
-	while (1)
-		;
+	while (1);
 }
 
 /************************/
@@ -214,6 +260,48 @@ void Error_Handler(void)
 	{
 	}
 }
+
+/*************************/
+/*     FreeRTOS Plus     */
+/*************************/
+
+void vLoggingPrintf( const char * pcFormat,
+                     ... )
+{
+    va_list arg;
+
+    va_start( arg, pcFormat );
+    vprintf( pcFormat, arg );
+    va_end( arg );
+}
+
+#if 0
+void vApplicationIPNetworkEventHook_Multi( eIPCallbackEvent_t eNetworkEvent,
+                                           struct xNetworkEndPoint * pxEndPoint )
+{
+static BaseType_t xTasksAlreadyCreated = pdFALSE;
+
+    /* Both eNetworkUp and eNetworkDown events can be processed here. */
+    if( eNetworkEvent == eNetworkUp )
+    {
+        /* Create the tasksCore/Src/main.c:62:50: note: each undeclared identifier is reported only once for each function it appears in that use the TCP/IP stack if they have not already
+           been created. */
+        if( xTasksAlreadyCreated == pdFALSE )
+        {
+            /*
+             * For convenience, tasks that use FreeRTOS-Plus-TCP can be created here
+             * to ensure they are not created before the network is usable.
+             */
+
+            xTasksAlreadyCreated = pdTRUE;
+        }
+    }
+    
+    /* Print out the network configuration, which may have come from a DHCP
+     * server. */
+    showEndPoint( pxEndPoint );
+}
+#endif
 
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t *file, uint32_t line)

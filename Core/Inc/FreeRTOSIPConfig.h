@@ -45,10 +45,10 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #define ipconfigUSE_IPv4                    ( 1 )
 
 /* Set to 1 to enable IPv6. */
-#define ipconfigUSE_IPv6                    ( 1 )
+#define ipconfigUSE_IPv6                    ( 0 )
 
 /* Set to 0 to disable backward compatible. */
-#define ipconfigIPv4_BACKWARD_COMPATIBLE    0
+#define ipconfigIPv4_BACKWARD_COMPATIBLE    1
 
 /* Set to 0 to disable compatible for multiple end-points/interfaces.
  * Only one interface/end-point is allowed to use when ipconfigCOMPATIBLE_WITH_SINGLE
@@ -80,6 +80,8 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * then set ipconfigDRIVER_INCLUDED_RX_IP_CHECKSUM to 1 to prevent the software
  * stack repeating the checksum calculations. */
 #define ipconfigDRIVER_INCLUDED_RX_IP_CHECKSUM     1
+// added same (user) to avoid warning at compilation time
+#define ipconfigDRIVER_INCLUDED_TX_IP_CHECKSUM     1
 
 /* Several API's will block until the result is known, or the action has been
  * performed, for example FreeRTOS_send() and FreeRTOS_recv(). The timeouts can be
@@ -90,10 +92,10 @@ extern void vLoggingPrintf( const char * pcFormatString,
 
 /* Include support for LLMNR: Link-local Multicast Name Resolution
  * (non-Microsoft) */
-#define ipconfigUSE_LLMNR                          ( 1 )
+#define ipconfigUSE_LLMNR                          ( 0 )
 
 /* Include support for NBNS: NetBIOS Name Service (Microsoft) */
-#define ipconfigUSE_NBNS                           ( 1 )
+#define ipconfigUSE_NBNS                           ( 0 )
 
 /* Include support for DNS caching. For TCP, having a small DNS cache is very
  * useful. When a cache is present, ipconfigDNS_REQUEST_ATTEMPTS can be kept low
@@ -160,7 +162,7 @@ extern UBaseType_t uxRand();
  * set to 1 if a valid configuration cannot be obtained from a DHCP server for any
  * reason. The static configuration used is that passed into the stack by the
  * FreeRTOS_IPInit() function call. */
-#define ipconfigUSE_DHCP                               1
+#define ipconfigUSE_DHCP                               0
 
 /* When ipconfigUSE_DHCP is set to 1, DHCP requests will be sent out at
  * increasing time intervals until either a reply is received from a DHCP server
@@ -316,13 +318,13 @@ extern UBaseType_t uxRand();
 #define ipconfigTCP_KEEP_ALIVE              ( 1 )
 #define ipconfigTCP_KEEP_ALIVE_INTERVAL     ( 20 ) /* in seconds */
 
+#define ipconfigUSE_RMII                    ( 1 )
+
 #define portINLINE                          __inline
 
 /* Set ipconfigBUFFER_PADDING on 64-bit platforms */
 #if INTPTR_MAX == INT64_MAX
     #define ipconfigBUFFER_PADDING    ( 14U )
 #endif /* INTPTR_MAX == INT64_MAX */
-
-#define STM32F7xx		                    1
 
 #endif /* FREERTOS_IP_CONFIG_H */

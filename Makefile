@@ -36,6 +36,7 @@ BUILD_DIR = build
 ######################################
 # C sources, core
 C_SOURCES = Core/Src/main.c \
+ Core/Src/freertos_ip_callback.c \
 Core/Src/stm32f7xx_it.c \
 Core/Src/stm32f7xx_hal_msp.c \
 Core/Src/stm32f7xx_hal_timebase_tim.c \
@@ -122,6 +123,7 @@ FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_UDP_IPv6.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/BufferManagement/BufferAllocation_2.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c
+# FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/stm32fxx_hal_eth.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -170,8 +172,8 @@ AS_DEFS =
 # C defines
 C_DEFS =  \
 -DUSE_HAL_DRIVER \
--DSTM32F779xx
-
+-DSTM32F779xx \
+-DSTM32F7xx=1
 
 # AS includes
 AS_INCLUDES =  \
