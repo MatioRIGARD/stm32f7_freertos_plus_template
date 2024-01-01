@@ -29,3 +29,7 @@ uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
                                              uint16_t usDestinationPort ) {
     return 0;
 }
+
+eDHCPCallbackAnswer_t xApplicationDHCPHook( eDHCPCallbackPhase_t eDHCPPhase,uint32_t ulIPAddress ) {
+    ;
+}
