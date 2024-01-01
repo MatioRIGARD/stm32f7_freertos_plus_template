@@ -21,6 +21,8 @@
 
 #include <stdarg.h>
 
+extern NetworkInterface_t * pxSTM32Fxx_FillInterfaceDescriptor( BaseType_t xEMACIndex,
+                                                         NetworkInterface_t * pxInterface );
 
 // HAL
 UART_HandleTypeDef huart1;
@@ -49,6 +51,10 @@ const osThreadAttr_t task2_attributes = {
 	.priority = (osPriority_t)osPriorityNormal,
 };
 
+// interfaces and endpoints
+static NetworkInterface_t xInterfaces[ 1 ];
+static NetworkEndPoint_t xEndPoints[ 1 ];
+
 /* Define the network addressing.  These parameters will be used if either
 ipconfigUDE_DHCP is 0 or if ipconfigUSE_DHCP is 1 but DHCP auto configuration
 failed. */
@@ -75,29 +81,26 @@ int main(void)
 	MX_GPIO_Init();
 	MX_USART1_UART_Init();
 
-	// FreeRTOS
+	// init Ethernet FreeRTOS+ TCP
+    pxSTM32Fxx_FillInterfaceDescriptor( 0, &( xInterfaces[ 0 ] ) );
+    
+    FreeRTOS_FillEndPoint( &( xInterfaces[ 0 ] ), &( xEndPoints[ 0 ] ), ucIPAddress,
+            ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
+    #if ( ipconfigUSE_DHCP != 0 )
+    {
+        xEndPoints[ 0 ].bits.bWantDHCP = pdTRUE;
+    }
+    #endif /* ( ipconfigUSE_DHCP != 0 ) */
+    FreeRTOS_IPInit_Multi();
+
+	// FreeRTOS tasks
 	osKernelInitialize();
 	defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 	task1Handle = osThreadNew(StartTask1, NULL, &task1_attributes);
 	task2Handle = osThreadNew(StartTask2, NULL, &task2_attributes);
 
-	// FreeRTOS Plus TCP/IP
-	__HAL_RCC_ETHMAC_CLK_ENABLE();
-    __HAL_RCC_ETHMACTX_CLK_ENABLE();
-    __HAL_RCC_ETHMACRX_CLK_ENABLE();
-	
-
-
-    /* Initialise the TCP/IP stack. */
-    FreeRTOS_IPInit( ucIPAddress,
-                     ucNetMask,
-                     ucGatewayAddress,
-                     ucDNSServerAddress,
-                     ucMACAddress );
-
 	// Start
 	vTaskStartScheduler();
-
 	while (1);
 }
 
