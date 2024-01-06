@@ -1,0 +1,6 @@
+#ifndef APP_STM32HAL_ERROR_HANDLER_H
+#define APP_STM32HAL_ERROR_HANDLER_H
+
+void Error_Handler(void);
+
+#endif  // APP_STM32HAL_ERROR_HANDLER_H

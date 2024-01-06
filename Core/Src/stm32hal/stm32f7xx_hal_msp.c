@@ -19,9 +19,9 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 /* USER CODE BEGIN Includes */
-
+#include "stm32f7xx_hal.h"
+#include "app_stm32hal_error_handler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

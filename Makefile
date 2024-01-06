@@ -34,13 +34,19 @@ BUILD_DIR = build
 ######################################
 # source
 ######################################
-# C sources, core
-C_SOURCES = Core/Src/main.c \
- Core/Src/freertos_ip_callback.c \
-Core/Src/stm32f7xx_it.c \
-Core/Src/stm32f7xx_hal_msp.c \
-Core/Src/stm32f7xx_hal_timebase_tim.c \
-Core/Src/system_stm32f7xx.c
+# C sources, core app
+C_SOURCES = Core/Src/application/main.c \
+Core/Src/application/app_freertos_tasks.c \
+Core/Src/application/app_network.c \
+Core/Src/application/app_stm32hal_error_handler.c \
+Core/Src/application/app_stm32hal.c
+
+# C sources, core freertos & stm32hal
+C_SOURCES += Core/Src/freertos/freertos_callback.c \
+Core/Src/stm32hal/stm32f7xx_it.c \
+Core/Src/stm32hal/stm32f7xx_hal_msp.c \
+Core/Src/stm32hal/stm32f7xx_hal_timebase_tim.c \
+Core/Src/stm32hal/system_stm32f7xx.c
 
 # Drivers
 C_SOURCES += \
@@ -63,6 +69,7 @@ Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim_ex.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_uart.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_uart_ex.c \
+Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_rng.c \
 Drivers/CMSIS_RTOS_V2/cmsis_os2.c
 
 # FreeRTOS
@@ -181,7 +188,9 @@ AS_INCLUDES =  \
 
 # C includes
 C_INCLUDES = \
--ICore/Inc \
+-ICore/Inc/stm32hal \
+-ICore/Inc/freertos \
+-ICore/Inc/application \
 -IDrivers/CMSIS/Device/ST/STM32F7xx/Include \
 -IDrivers/CMSIS/Include \
 -IDrivers/CMSIS_RTOS_V2 \
