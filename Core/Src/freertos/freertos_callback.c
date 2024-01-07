@@ -13,6 +13,14 @@ extern UART_HandleTypeDef huart1;
 // read this again for implementation : https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/API/vApplicationIPNetworkEventHook.html
 void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
     (void) eNetworkEvent;
+    static BaseType_t xTasksAlreadyCreated = pdFALSE;
+    if( eNetworkEvent == eNetworkUp )
+    {
+        if( xTasksAlreadyCreated == pdFALSE )
+        {
+            xTasksAlreadyCreated = pdTRUE;
+        }
+    }
 }
 
 // generate random number. See in doc of STM32 how to. 

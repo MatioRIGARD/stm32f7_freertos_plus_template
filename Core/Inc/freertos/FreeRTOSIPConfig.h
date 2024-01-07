@@ -53,7 +53,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
 /* Set to 0 to disable compatible for multiple end-points/interfaces.
  * Only one interface/end-point is allowed to use when ipconfigCOMPATIBLE_WITH_SINGLE
  * is set to 1. */
-#define ipconfigCOMPATIBLE_WITH_SINGLE      0
+#define ipconfigCOMPATIBLE_WITH_SINGLE      1
 
 /* Set to 1 to print out debug messages. If ipconfigHAS_DEBUG_PRINTF is set to
  * 1 then FreeRTOS_debug_printf should be defined to the function used to print
@@ -242,7 +242,7 @@ extern UBaseType_t uxRand();
 #define ipconfigUSE_TCP                                ( 1 )
 
 /* USE_WIN: Let TCP use windowing mechanism. */
-#define ipconfigUSE_TCP_WIN                            ( 1 )
+#define ipconfigUSE_TCP_WIN                            ( 0 )
 
 /* The MTU is the maximum number of bytes the payload of a network frame can
  * contain. For normal Ethernet V2 frames the maximum MTU is 1500. Setting a
@@ -253,7 +253,7 @@ extern UBaseType_t uxRand();
 
 /* Set ipconfigUSE_DNS to 1 to include a basic DNS client/resolver. DNS is used
  * through the FreeRTOS_gethostbyname() API function. */
-#define ipconfigUSE_DNS                                1
+#define ipconfigUSE_DNS                                0
 
 /* If ipconfigREPLY_TO_INCOMING_PINGS is set to 1 then the IP stack will
  * generate replies to incoming ICMP echo (ping) requests. */
@@ -318,7 +318,7 @@ extern UBaseType_t uxRand();
 #define ipconfigTCP_KEEP_ALIVE              ( 1 )
 #define ipconfigTCP_KEEP_ALIVE_INTERVAL     ( 20 ) /* in seconds */
 
-#define ipconfigUSE_RMII                    ( 1 )
+#define ipconfigUSE_RMII                    ( 0 )
 
 #define portINLINE                          __inline
 
