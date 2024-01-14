@@ -43,6 +43,7 @@ Core/Src/application/app_stm32hal.c
 
 # C sources, core freertos & stm32hal
 C_SOURCES += Core/Src/freertos/freertos_callback.c \
+Core/Src/freertos/printf-stdarg.c \
 Core/Src/stm32hal/stm32f7xx_it.c \
 Core/Src/stm32hal/stm32f7xx_hal_msp.c \
 Core/Src/stm32hal/stm32f7xx_hal_timebase_tim.c \
@@ -63,7 +64,6 @@ Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_pwr_ex.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_i2c.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_i2c_ex.c \
-Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_eth.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_exti.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim_ex.c \
@@ -71,6 +71,7 @@ Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_uart.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_uart_ex.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_rng.c \
 Drivers/CMSIS_RTOS_V2/cmsis_os2.c
+# Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_eth.c
 
 # FreeRTOS
 C_SOURCES += \
@@ -129,8 +130,8 @@ FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_UDP_IPv4.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_UDP_IPv6.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/BufferManagement/BufferAllocation_2.c \
-FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c
-# FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/stm32fxx_hal_eth.c
+FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c \
+FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/stm32fxx_hal_eth.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -201,16 +202,16 @@ C_INCLUDES = \
 # freertos
 C_INCLUDES += \
 -IFreeRTOS/FreeRTOS/Source/include \
--IFreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1 \
--IFreeRTOS/FreeRTOS-Plus/Source/Utilities/logging
+-IFreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1
+# -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/logging
 
 # freertos plus
 C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/include \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/Compiler/GCC \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx \
--IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/include \
--IFreeRTOS/FreeRTOS/Demo/CORTEX_M7_STM32F7_STM32756G-EVAL_IAR_Keil/ST_Library/include
+-IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/include
+# -IFreeRTOS/FreeRTOS/Demo/CORTEX_M7_STM32F7_STM32756G-EVAL_IAR_Keil/ST_Library/include
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

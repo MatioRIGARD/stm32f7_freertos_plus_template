@@ -14,6 +14,7 @@ extern UART_HandleTypeDef huart1;
 void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
     (void) eNetworkEvent;
     static BaseType_t xTasksAlreadyCreated = pdFALSE;
+
     if( eNetworkEvent == eNetworkUp )
     {
         if( xTasksAlreadyCreated == pdFALSE )
@@ -26,7 +27,6 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
 // generate random number. See in doc of STM32 how to. 
 // read this again  for implementation : https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/API/xApplicationGetRandomNumber.html
 BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber ) {
-    // modify with random generator, return pdTRUE if success
     if (HAL_RNG_GenerateRandomNumber(&hRng, pulNumber) == HAL_OK) return pdPASS;
     else return pdFAIL;
 }
@@ -59,7 +59,6 @@ void vLoggingPrintf( const char * pcFormat, ... )
 		return;
 	}
 
-	// Création de la chaîne finale
 	va_start(args_list, pcFormat);
 	vsnprintf((char *)final_string, final_length, pcFormat, args_list);
 	va_end(args_list);
@@ -67,6 +66,12 @@ void vLoggingPrintf( const char * pcFormat, ... )
 	HAL_UART_Transmit(&huart1, final_string, final_length, HAL_MAX_DELAY);
 
 	free(final_string);
+    HAL_UART_Transmit(&huart1, "\r", 2, HAL_MAX_DELAY);
+}
+
+void vApplicationMallocFailedHook()
+{
+	configASSERT( 0 );
 }
 
 #ifdef USE_FULL_ASSERT
