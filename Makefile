@@ -43,7 +43,6 @@ Core/Src/application/app_stm32hal.c
 
 # C sources, core freertos & stm32hal
 C_SOURCES += Core/Src/freertos/freertos_callback.c \
-Core/Src/freertos/printf-stdarg.c \
 Core/Src/stm32hal/stm32f7xx_it.c \
 Core/Src/stm32hal/stm32f7xx_hal_msp.c \
 Core/Src/stm32hal/stm32f7xx_hal_timebase_tim.c \
