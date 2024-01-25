@@ -61,6 +61,7 @@ File>New Project
 6. Ethernet configuration
 
 ![Ethernet parameters settings](./img/stm32f7_tutorial/9.png)
+![Ethernet NVIC settings](./img/stm32f7_tutorial/15.png)
 ![Ethernet GPIO 1](./img/stm32f7_tutorial/10.png)
 ![Ethernet GPIO 2](./img/stm32f7_tutorial/11.png)
 
@@ -200,7 +201,7 @@ C_INCLUDES += \
 -IFreeRTOS/FreeRTOS/Demo/CORTEX_M7_STM32F7_STM32756G-EVAL_IAR_Keil/ST_Library/include
 ```
 
-2. New `C_SOURCES` list
+2. New `C_SOURCES` list:
 
 ``` makefile
 # C sources, core
@@ -225,7 +226,6 @@ Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_pwr_ex.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_i2c.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_i2c_ex.c \
-Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_eth.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_exti.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim.c \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_tim_ex.c \
@@ -290,8 +290,11 @@ FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_UDP_IPv4.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_UDP_IPv6.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/Common/phyHandling.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/BufferManagement/BufferAllocation_2.c \
-FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c
+FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c \
+FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/stm32fxx_hal_eth.c
 ```
+
+As you can see, I use the FreeRTOS ethernet driver for STM32. It's important to use the file provided by FreeRTOS and not the one provided by STM.
 
 3. Update libs and flag to use rdimon instead of nano
 

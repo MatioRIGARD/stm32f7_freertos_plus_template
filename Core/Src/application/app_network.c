@@ -6,7 +6,7 @@ static const uint8_t ucGatewayAddress[ 4 ] = { 192, 168, 0, 1 };
 
 static const uint8_t ucDNSServerAddress[ 4 ] = { 1, 1, 1, 1 };
 
-static uint8_t ucMACAddress[ 6 ] = { 0x02, 0x12, 0x22, 0x33, 0x44, 0x55 };
+static uint8_t ucMACAddress[ 6 ] = { 0x00, 0x11, 0x22, 0x33, 0x44, 0x55 };
 
 void app_initNetwork(void) {
     FreeRTOS_IPInit( ucIPAddress,

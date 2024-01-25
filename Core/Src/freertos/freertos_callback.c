@@ -66,7 +66,7 @@ void vLoggingPrintf( const char * pcFormat, ... )
 	HAL_UART_Transmit(&huart1, final_string, final_length, HAL_MAX_DELAY);
 
 	free(final_string);
-    HAL_UART_Transmit(&huart1, "\r", 2, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart1, (const uint8_t*)"\r", 2, HAL_MAX_DELAY);
 }
 
 void vApplicationMallocFailedHook()
@@ -81,15 +81,25 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif /* USE_FULL_ASSERT */
 
 
-/*
 eDHCPCallbackAnswer_t xApplicationDHCPHook( eDHCPCallbackPhase_t eDHCPPhase,uint32_t ulIPAddress ) {
-    ;
+    eDHCPCallbackAnswer_t eReturn;
+
+    switch( eDHCPPhase )
+    {
+        case eDHCPPhasePreRequest:
+            eReturn = eDHCPContinue;
+            break;
+
+        default:
+            eReturn = eDHCPContinue;
+            break;
+    }
+    return eReturn;
 }
 
 // Declare if needed (dns related). 
 // Probably need to set ipconfigUSE_LLMNR to 1 in FreeRTOSIPConfig.h file
 // Read this again for implementation : https://www.freertos.org/FreeRTOS-Plus/FreeRTOS_Plus_TCP/API/xApplicationDNSQueryHook.html
 BaseType_t xApplicationDNSQueryHook( const char * pcName ) {
-
+    return (BaseType_t)0;
 }
-*/

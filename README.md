@@ -12,6 +12,8 @@ After cloning, don't forget to load submodules with:
 git submodule update --init --recursive
 ```
 
+update 27/01/2024: Ping is now working
+
 ## More details
 
 If you want to have more details about how I build this template, you can see it here: [Tuto link](./stm32f7_template_init.md)
