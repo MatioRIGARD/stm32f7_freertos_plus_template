@@ -1,0 +1,16 @@
+1706354930: mosquitto version 2.0.18 starting
+1706354930: Config loaded from mosquitto.conf.
+1706354930: Warning: File ./mosquitto_passwords.pass has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 ./mosquitto_passwords.pass`.
+1706354930: Warning: File ./mosquitto_passwords.pass owner is not mosquitto. Future versions will refuse to load this file.To fix this, use `chown mosquitto ./mosquitto_passwords.pass`.
+1706354930: Warning: File ./mosquitto_passwords.pass group is not mosquitto. Future versions will refuse to load this file.
+1706354930: Opening ipv4 listen socket on port 44444.
+1706354930: Opening ipv6 listen socket on port 44444.
+1706354930: mosquitto version 2.0.18 running
+1706354947: New connection from ::1:37870 on port 44444.
+1706354948: New client connected from ::1:37870 as auto-3CEE5DB9-2988-CCF8-9F76-7ADE1D1E1496 (p2, c1, k60, u'user02').
+1706354959: New connection from ::1:56778 on port 44444.
+1706354959: New client connected from ::1:56778 as auto-5A99D5D9-33C4-54D5-E72A-63423464FBC4 (p2, c1, k60, u'user01').
+1706354959: Client auto-5A99D5D9-33C4-54D5-E72A-63423464FBC4 disconnected.
+1706355030: Client auto-3CEE5DB9-2988-CCF8-9F76-7ADE1D1E1496 disconnected.
+1706355032: mosquitto version 2.0.18 terminating
