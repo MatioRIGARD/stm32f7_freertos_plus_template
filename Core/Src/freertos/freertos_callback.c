@@ -1,3 +1,8 @@
+/*
+This file contains all callback used with MQTT. 
+In case of use in a final project, move these functions to apropriate file
+*/
+
 #include "FreeRTOS_IP.h"
 #include "stm32f7xx_hal.h"
 #include "stm32f7xx_hal_def.h"
@@ -103,3 +108,4 @@ eDHCPCallbackAnswer_t xApplicationDHCPHook( eDHCPCallbackPhase_t eDHCPPhase,uint
 BaseType_t xApplicationDNSQueryHook( const char * pcName ) {
     return (BaseType_t)0;
 }
+

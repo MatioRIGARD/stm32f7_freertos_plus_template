@@ -1,3 +1,4 @@
 build/
 .vscode/
 STM32Make.make
+doc/notes/*

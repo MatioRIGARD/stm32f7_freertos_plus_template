@@ -102,7 +102,7 @@ touch mosquitto.log
 
 Here is the `mosquitto.conf` file I use:
 
-```conf
+```bash
 ###############################
 ## Custom conf file for demo ##
 ###############################

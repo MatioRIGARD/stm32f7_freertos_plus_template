@@ -4,9 +4,9 @@
 #include "cmsis_os.h"
 
 void app_initTasks(void);
-void StartTask1(void *argument);
-void StartTask2(void *argument);
-void StartDefaultTask(void *argument);
+void startTask1(void *argument);
+void startTask2(void *argument);
+void startDefaultTask(void *argument);
 void simpleMqttTestTask(void *argument);
 
 #endif  // APP_FREERTOS_TASKS_H

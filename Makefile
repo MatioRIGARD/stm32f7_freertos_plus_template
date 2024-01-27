@@ -31,6 +31,7 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 
+
 ######################################
 # source
 ######################################
@@ -39,7 +40,8 @@ C_SOURCES = Core/Src/application/main.c \
 Core/Src/application/app_freertos_tasks.c \
 Core/Src/application/app_network.c \
 Core/Src/application/app_stm32hal_error_handler.c \
-Core/Src/application/app_stm32hal.c
+Core/Src/application/app_stm32hal.c \
+Core/Src/application/app_mqtt.c
 
 # C sources, core freertos & stm32hal
 C_SOURCES += Core/Src/freertos/freertos_callback.c \
@@ -85,7 +87,8 @@ FreeRTOS/FreeRTOS/Source/portable/MemMang/heap_4.c \
 FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1/port.c
 
 # FreeRTOS-Plus TCP
-C_SOURCES += FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_ARP.c \
+C_SOURCES += \
+FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_ARP.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_BitConfig.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_DHCP.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/FreeRTOS_DHCPv6.c \
@@ -132,6 +135,26 @@ FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/BufferManagement
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/NetworkInterface.c \
 FreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx/stm32fxx_hal_eth.c
 
+# MQTT Core
+C_SOURCES += \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/core_mqtt_serializer.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/core_mqtt_state.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/core_mqtt.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c \
+FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c \
+FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c
+
+# MBed tls
+# C_SOURCES += \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_bio_tcp_sockets_wrapper.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_pk_pkcs11.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_rng_pkcs11.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_mbedtls_pkcs11.c \
+FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c
+
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f779xx.s
@@ -156,7 +179,8 @@ SZ = $(PREFIX)size
 endif
 HEX = $(CP) -O ihex
 BIN = $(CP) -O binary -S
- 
+
+
 #######################################
 # CFLAGS
 #######################################
@@ -191,6 +215,10 @@ C_INCLUDES = \
 -ICore/Inc/stm32hal \
 -ICore/Inc/freertos \
 -ICore/Inc/application \
+-ICore/Inc/mbed_tls/alt-dummy
+
+# STM32
+C_INCLUDES += \
 -IDrivers/CMSIS/Device/ST/STM32F7xx/Include \
 -IDrivers/CMSIS/Include \
 -IDrivers/CMSIS_RTOS_V2 \
@@ -202,14 +230,32 @@ C_INCLUDES = \
 C_INCLUDES += \
 -IFreeRTOS/FreeRTOS/Source/include \
 -IFreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM7/r0p1
-# -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/logging
 
-# freertos plus
+# freertos plus TCP
 C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/include \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/Compiler/GCC \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/STM32Fxx \
 -IFreeRTOS/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/source/portable/NetworkInterface/include
+
+# FreeRTOSPlus MQTT Core
+C_INCLUDES += \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/include \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/interface \
+-IFreeRTOS/FreeRTOS-Plus/Source/Utilities/logging \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
+-IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include
+
+# MBed tls
+# C_INCLUDES += \
+-IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
+-IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include \
+-IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/library \
+-IFreeRTOS/FreeRTOS-Plus/Source/corePKCS11/source/include \
+-IFreeRTOS/FreeRTOS-Plus/ThirdParty/wolfSSL/wolfssl/wolfcrypt
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -219,7 +265,6 @@ CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
 endif
-
 
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
@@ -269,15 +314,18 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir $@		
 
+
 #######################################
 # clean up
 #######################################
 clean:
 	-rm -fR $(BUILD_DIR)
-  
+
+
 #######################################
 # dependencies
 #######################################
 -include $(wildcard $(BUILD_DIR)/*.d)
+
 
 # *** EOF ***

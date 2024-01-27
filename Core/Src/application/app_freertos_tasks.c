@@ -24,12 +24,12 @@ const osThreadAttr_t task2_attributes = {
 };
 
 void app_initTasks(void) {
-	defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-	task1Handle = osThreadNew(StartTask1, NULL, &task1_attributes);
-	task2Handle = osThreadNew(StartTask2, NULL, &task2_attributes);
+	defaultTaskHandle = osThreadNew(startDefaultTask, NULL, &defaultTask_attributes);
+	task1Handle = osThreadNew(startTask1, NULL, &task1_attributes);
+	task2Handle = osThreadNew(startTask2, NULL, &task2_attributes);
 }
 
-void StartTask1(void *argument)
+void startTask1(void *argument)
 {
 	for (;;)
 	{
@@ -42,7 +42,7 @@ void StartTask1(void *argument)
 	}
 }
 
-void StartTask2(void *argument)
+void startTask2(void *argument)
 {
 	for (;;)
 	{
@@ -55,7 +55,7 @@ void StartTask2(void *argument)
 	}
 }
 
-void StartDefaultTask(void *argument)
+void startDefaultTask(void *argument)
 {
 	for (;;)
 	{
