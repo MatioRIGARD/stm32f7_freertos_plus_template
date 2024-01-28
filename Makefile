@@ -143,17 +143,12 @@ FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/core_mqtt.c 
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c \
 FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c \
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c \
-FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c
 
 # MBed tls
-# C_SOURCES += \
+C_SOURCES += \
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_bio_tcp_sockets_wrapper.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_pk_pkcs11.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_rng_pkcs11.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_mbedtls_pkcs11.c \
-FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_mbedtls.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -215,7 +210,7 @@ C_INCLUDES = \
 -ICore/Inc/stm32hal \
 -ICore/Inc/freertos \
 -ICore/Inc/application \
--ICore/Inc/mbed_tls/alt-dummy
+-ICore/Inc/mbedTLS
 
 # STM32
 C_INCLUDES += \
@@ -248,8 +243,9 @@ C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include
 
 # MBed tls
-# C_INCLUDES += \
--IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include \
+C_INCLUDES += \
+-IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include
+# -IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include \
 -IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport \
 -IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
 -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include \

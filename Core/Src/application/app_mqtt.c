@@ -1,8 +1,8 @@
 #include "app_mqtt.h"
 #include "app_freertos_tasks.h"
-#include "transport_interface.h"
-#include "FreeRTOS_IP.h"
+#include "FreeRTOS.h"
 #include "backoff_algorithm.h"
+#include "transport_mbedtls.h"
 
 #include <string.h>
 
@@ -17,12 +17,14 @@ static uint16_t usSubscribePacketIdentifier;
 static uint16_t usUnsubscribePacketIdentifier;
 static uint16_t usPublishPacketIdentifier;
 
+/*
 osThreadId_t mqttTaskHandle;
 const osThreadAttr_t mqttTask_attributes = {
 	.name = "mqttTask",
 	.stack_size = 128 * 4,
 	.priority = (osPriority_t)osPriorityIdle,
 };
+*/
 
 void app_initMqtt() {
     // mqttTaskHandle = osThreadNew(startMqttTask, NULL, &mqttTask_attributes);
@@ -31,7 +33,7 @@ void app_initMqtt() {
                  128 * 4,
                  NULL,
                  (osPriority_t)osPriorityIdle,
-                 NULL );  
+                 NULL );
 }
 
 void startMqttTask(void *argument) {
@@ -39,6 +41,7 @@ void startMqttTask(void *argument) {
     uint32_t ulPublishCount = 0U, ulTopicCount = 0U;
     const uint32_t ulMaxPublishCount = 5UL;
     NetworkContext_t xNetworkContext = { 0 };
+    TlsTransportParams_t xTlsTransportParams = { 0 };
     PlaintextTransportParams_t xPlaintextTransportParams = { 0 };
     MQTTContext_t xMQTTContext = { 0 };
     MQTTStatus_t xMQTTStatus;

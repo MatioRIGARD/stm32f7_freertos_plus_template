@@ -12,7 +12,7 @@ int main(void)
 	osKernelInitialize();
 	app_initNetwork();
 	app_initMqtt();
-	// app_initTasks();
+	app_initTasks();
 	
 	vLoggingPrintf("Hello World!\r\n");
 
