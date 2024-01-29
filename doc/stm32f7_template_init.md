@@ -308,3 +308,33 @@ LDFLAGS = $(MCU) -specs=rdimon.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(
 
 Replace the generated `Core/Src/main.c` and `Core/Src/main.h` by the one provided in this repository.
 
+## Use MbedTLS
+
+To use MbedTLS and add it to the project, you need to build lib objects:
+
+1. ./library/libmbedtls.a
+1. ./library/libmbedx509.a
+1. ./library/libmbedcrypto.a
+
+Updated Makefile:
+
+```Makefile
+# default action: build all
+all: mbedtls $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+```
+
+Linked libs and added lib directory:
+
+```Makefile
+# libraries
+LIBS = -lc -lm -lrdimon -lmbedtls -lmbedx509 -lmbedcrypto
+LIBDIR = -LFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/library
+```
+
+Added make target bellow:
+
+```Makefile
+mbedtls:
+	make -c FreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls
+```
+

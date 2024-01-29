@@ -1,6 +1,8 @@
+#include "FreeRTOS.h"
+#include "FreeRTOS_IP.h"
+#include "task.h"
 #include "app_mqtt.h"
 #include "app_freertos_tasks.h"
-#include "FreeRTOS.h"
 #include "backoff_algorithm.h"
 #include "transport_mbedtls.h"
 
@@ -17,20 +19,12 @@ static uint16_t usSubscribePacketIdentifier;
 static uint16_t usUnsubscribePacketIdentifier;
 static uint16_t usPublishPacketIdentifier;
 
-/*
-osThreadId_t mqttTaskHandle;
-const osThreadAttr_t mqttTask_attributes = {
-	.name = "mqttTask",
-	.stack_size = 128 * 4,
-	.priority = (osPriority_t)osPriorityIdle,
-};
-*/
 
 void app_initMqtt() {
-    // mqttTaskHandle = osThreadNew(startMqttTask, NULL, &mqttTask_attributes);
+
     xTaskCreate( startMqttTask,
                  "MqttTask",
-                 128 * 4,
+                 democonfigDEMO_STACKSIZE,
                  NULL,
                  (osPriority_t)osPriorityIdle,
                  NULL );
@@ -42,14 +36,14 @@ void startMqttTask(void *argument) {
     const uint32_t ulMaxPublishCount = 5UL;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportParams_t xTlsTransportParams = { 0 };
-    PlaintextTransportParams_t xPlaintextTransportParams = { 0 };
+    NetworkCredentials_t xNetworkCredentials = { 0 };
     MQTTContext_t xMQTTContext = { 0 };
     MQTTStatus_t xMQTTStatus;
-    PlaintextTransportStatus_t xNetworkStatus;
+    TlsTransportStatus_t xNetworkStatus;
 
     ( void ) argument;
 
-    xNetworkContext.pParams = &xPlaintextTransportParams;
+    xNetworkContext.pParams = &xTlsTransportParams;
 
     globalEntryTimeMs = getTimeMs();
 
@@ -69,12 +63,11 @@ void startMqttTask(void *argument) {
             }
         }
 
-        xNetworkStatus = connectToServerWithBackoffRetries( &xNetworkContext );
-        configASSERT( xNetworkStatus == PLAINTEXT_TRANSPORT_SUCCESS );
+        xNetworkStatus = connectToServerWithBackoffRetries( &xNetworkCredentials, &xNetworkContext );
+        configASSERT( xNetworkStatus == TLS_TRANSPORT_SUCCESS );
 
         LogInfo( ( "Creating an MQTT connection to %s.\r\n", democonfigMQTT_BROKER_ENDPOINT ) );
         createMqttConnectionWithBroker( &xMQTTContext, &xNetworkContext );
-
         mqttSubscribeWithBackoffRetries( &xMQTTContext );
 
         for( ulPublishCount = 0; ulPublishCount < ulMaxPublishCount; ulPublishCount++ )
@@ -84,21 +77,17 @@ void startMqttTask(void *argument) {
             LogInfo( ( "Attempt to receive publishes from broker.\r\n" ) );
             xMQTTStatus = processLoopWithTimeout( &xMQTTContext, mqttexamplePROCESS_LOOP_TIMEOUT_MS );
             configASSERT( xMQTTStatus == MQTTSuccess );
-
             LogInfo( ( "Keeping Connection Idle...\r\n\r\n" ) );
             vTaskDelay( mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS );
         }
 
         mqttUnsubscribeFromTopics( &xMQTTContext );
-
         xMQTTStatus = processLoopWithTimeout( &xMQTTContext, mqttexamplePROCESS_LOOP_TIMEOUT_MS );
         configASSERT( xMQTTStatus == MQTTSuccess );
-
         LogInfo( ( "Disconnecting the MQTT connection with %s.\r\n", democonfigMQTT_BROKER_ENDPOINT ) );
         xMQTTStatus = MQTT_Disconnect( &xMQTTContext );
         configASSERT( xMQTTStatus == MQTTSuccess );
-
-        Plaintext_FreeRTOS_Disconnect( &xNetworkContext );
+        TLS_FreeRTOS_Disconnect( &xNetworkContext );
 
         for( ulTopicCount = 0; ulTopicCount < mqttexampleTOPIC_COUNT; ulTopicCount++ )
         {
@@ -138,9 +127,9 @@ void initializeTopicBuffers( void )
     }
 }
 
-PlaintextTransportStatus_t connectToServerWithBackoffRetries( NetworkContext_t * pxNetworkContext )
+TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials, NetworkContext_t * pxNetworkContext )
 {
-    PlaintextTransportStatus_t xNetworkStatus;
+    TlsTransportStatus_t xNetworkStatus;
     BackoffAlgorithmStatus_t xBackoffAlgStatus = BackoffAlgorithmSuccess;
     BackoffAlgorithmContext_t xReconnectParams;
     uint16_t usNextRetryBackOff = 0U;
@@ -154,13 +143,14 @@ PlaintextTransportStatus_t connectToServerWithBackoffRetries( NetworkContext_t *
         LogInfo( ( "Create a TCP connection to %s:%d.",
                    democonfigMQTT_BROKER_ENDPOINT,
                    democonfigMQTT_BROKER_PORT ) );
-        xNetworkStatus = Plaintext_FreeRTOS_Connect( pxNetworkContext,
-                                                     democonfigMQTT_BROKER_ENDPOINT,
-                                                     democonfigMQTT_BROKER_PORT,
-                                                     mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS,
-                                                     mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS );
+        xNetworkStatus = TLS_FreeRTOS_Connect( pxNetworkContext,
+                                               democonfigMQTT_BROKER_ENDPOINT,
+                                               democonfigMQTT_BROKER_PORT,
+                                               pxNetworkCredentials,
+                                               mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS,
+                                               mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS );
 
-        if( xNetworkStatus != PLAINTEXT_TRANSPORT_SUCCESS )
+        if( xNetworkStatus != TLS_TRANSPORT_SUCCESS )
         {
             uint32_t randomNumber;
             xApplicationGetRandomNumber(&randomNumber);
@@ -177,7 +167,7 @@ PlaintextTransportStatus_t connectToServerWithBackoffRetries( NetworkContext_t *
                 vTaskDelay( pdMS_TO_TICKS( usNextRetryBackOff ) );
             }
         }
-    } while( ( xNetworkStatus != PLAINTEXT_TRANSPORT_SUCCESS ) && ( xBackoffAlgStatus == BackoffAlgorithmSuccess ) );
+    } while( ( xNetworkStatus != TLS_TRANSPORT_SUCCESS ) && ( xBackoffAlgStatus == BackoffAlgorithmSuccess ) );
 
     return xNetworkStatus;
 }
@@ -190,8 +180,8 @@ void createMqttConnectionWithBroker( MQTTContext_t * pxMQTTContext, NetworkConte
     TransportInterface_t xTransport;
 
     xTransport.pNetworkContext = pxNetworkContext;
-    xTransport.send = Plaintext_FreeRTOS_send;
-    xTransport.recv = Plaintext_FreeRTOS_recv;
+    xTransport.send = TLS_FreeRTOS_send;
+    xTransport.recv = TLS_FreeRTOS_recv;
     xTransport.writev = NULL;
 
     xResult = MQTT_Init( pxMQTTContext, &xTransport, getTimeMs, prvEventCallback, &xBuffer );

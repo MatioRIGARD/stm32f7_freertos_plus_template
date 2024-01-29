@@ -1,13 +1,14 @@
 #ifndef APP_MQTT_H
 #define APP_MQTT_H
 
-#include "transport_plaintext.h"
+#include "transport_mbedtls.h"
 #include "core_mqtt.h"
 
 #define democonfigMQTT_BROKER_ENDPOINT                      "192.168.0.11"
 #define democonfigMQTT_BROKER_PORT                          ((uint16_t) 44444)
 #define democonfigCLIENT_IDENTIFIER                         "testClient"__TIME__
 #define democonfigNETWORK_BUFFER_SIZE                       (1024U)
+#define democonfigDEMO_STACKSIZE                            (512U)  // 60 minimum?
 
 #define mqttexampleTOPIC_COUNT                              (3U)
 #define mqttexampleTOPIC_BUFFER_SIZE                        (100U)
@@ -25,7 +26,7 @@
 
 struct NetworkContext
 {
-    PlaintextTransportParams_t * pParams;
+    TlsTransportParams_t * pParams;
 };
 
 typedef struct topicFilterContext
@@ -42,7 +43,7 @@ uint32_t getTimeMs( void );
 void initializeTopicBuffers( void );
 
 // MQTT
-PlaintextTransportStatus_t connectToServerWithBackoffRetries( NetworkContext_t * pxNetworkContext );
+TlsTransportStatus_t connectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials, NetworkContext_t * pxNetworkContext );
 void createMqttConnectionWithBroker( MQTTContext_t * pxMQTTContext, NetworkContext_t * pxNetworkContext );
 void prvEventCallback( MQTTContext_t * pxMQTTContext, MQTTPacketInfo_t * pxPacketInfo, MQTTDeserializedInfo_t * pxDeserializedInfo );
 void mqttProcessIncomingPublish( MQTTPublishInfo_t * pxPublishInfo );
