@@ -274,7 +274,7 @@ LDSCRIPT = STM32F779NIHx_FLASH.ld
 
 # libraries
 LIBS = -lc -lm -lrdimon -lmbedtls -lmbedx509 -lmbedcrypto
-LIBDIR = 
+LIBDIR = -LFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/library
 LDFLAGS = $(MCU) -specs=rdimon.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
@@ -311,8 +311,7 @@ $(BUILD_DIR):
 	mkdir $@		
 
 mbedtls:
-	make -c FreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls
-
+	$(MAKE) -C FreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls CC="$(CC)" CFLAGS="$(CFLAGS)" 
 
 #######################################
 # clean up
