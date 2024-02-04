@@ -10,3 +10,6 @@
 [submodule "Drivers/cmsis_core"]
 	path = Drivers/cmsis_core
 	url = git@github.com:STMicroelectronics/cmsis_core.git
+[submodule "wolfssl"]
+	path = wolfssl
+	url = git@github.com:wolfSSL/wolfssl.git
