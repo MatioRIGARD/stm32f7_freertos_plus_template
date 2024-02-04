@@ -32,7 +32,7 @@ OPT = -Og
 BUILD_DIR = build
 
 # Makefile path
-MAKEFILE_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 ######################################
 # source
@@ -147,6 +147,10 @@ FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorit
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c
 
+# wolfSSL
+C_SOURCES += \
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_wolfSSL.c
+
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f779xx.s
@@ -207,7 +211,7 @@ C_INCLUDES = \
 -ICore/Inc/stm32hal \
 -ICore/Inc/freertos \
 -ICore/Inc/application \
--ICore/Inc/mbedTLS
+-ICore/Inc/wolfssl
 
 # STM32
 C_INCLUDES += \
@@ -241,7 +245,9 @@ C_INCLUDES += \
 
 # wolfssl
 C_INCLUDES += \
--IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include
+-Ilib/wolfssl/include
+#-Ilib/wolfssl/include/wolfssl/wolfcrypt
+#-Ilib/wolfssl/include/wolfssl/openssl
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -310,7 +316,7 @@ $(BUILD_DIR):
 
 wolfssl_build:
 	mkdir -p lib/wolfssl/
-	cd wolfssl/ && ./configure --host=arm-non-eabi CC=arm-none-eabi-gcc AR=arm-none-eabi-ar STRIP=arm-none-eabi-strip RANLIB=arm-none-eabi-ranlib --prefix=$(MAKEFILE_DIR)lib/wolfssl CFLAGS="-march=armv8-a --specs=nosys.specs -DHAVE_PK_CALLBACKS -DWOLFSSL_USER_IO -DNO_WRITEV -DTIME_T_NOT_64BIT" --disable-filesystem --enable-fastmath --disable-shared
+	cd wolfssl/ && ./configure --host=arm-non-eabi CC=arm-none-eabi-gcc AR=arm-none-eabi-ar STRIP=arm-none-eabi-strip RANLIB=arm-none-eabi-ranlib --prefix=$(ROOT_DIR)lib/wolfssl CFLAGS="-march=armv8-a --specs=nosys.specs -DHAVE_PK_CALLBACKS -DWOLFSSL_USER_IO -DNO_WRITEV -DTIME_T_NOT_64BIT" --disable-filesystem --enable-fastmath --disable-shared
 	make -C wolfssl/
 	make install -C wolfssl/
 

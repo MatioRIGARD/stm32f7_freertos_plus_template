@@ -1,7 +1,7 @@
 #ifndef APP_MQTT_H
 #define APP_MQTT_H
 
-#include "transport_mbedtls.h"
+#include "transport_wolfSSL.h"
 #include "core_mqtt.h"
 
 #define democonfigMQTT_BROKER_ENDPOINT                      "192.168.0.11"
@@ -24,10 +24,12 @@
 #define mqttexamplePROCESS_LOOP_TIMEOUT_MS                  (2000U)
 #define mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS            (pdMS_TO_TICKS (2000U))
 
+/*
 struct NetworkContext
 {
     TlsTransportParams_t * pParams;
 };
+*/
 
 typedef struct topicFilterContext
 {

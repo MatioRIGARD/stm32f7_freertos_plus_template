@@ -4,7 +4,7 @@
 #include "app_mqtt.h"
 #include "app_freertos_tasks.h"
 #include "backoff_algorithm.h"
-#include "transport_mbedtls.h"
+#include "transport_wolfSSL.h"
 
 #include <string.h>
 
@@ -35,7 +35,7 @@ void startMqttTask(void *argument) {
     uint32_t ulPublishCount = 0U, ulTopicCount = 0U;
     const uint32_t ulMaxPublishCount = 5UL;
     NetworkContext_t xNetworkContext = { 0 };
-    TlsTransportParams_t xTlsTransportParams = { 0 };
+    // TlsTransportParams_t xTlsTransportParams = { 0 };
     NetworkCredentials_t xNetworkCredentials = { 0 };
     MQTTContext_t xMQTTContext = { 0 };
     MQTTStatus_t xMQTTStatus;
@@ -43,7 +43,7 @@ void startMqttTask(void *argument) {
 
     ( void ) argument;
 
-    xNetworkContext.pParams = &xTlsTransportParams;
+    // xNetworkContext.pParams = &xTlsTransportParams;
 
     globalEntryTimeMs = getTimeMs();
 
@@ -127,7 +127,7 @@ void initializeTopicBuffers( void )
     }
 }
 
-TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials, NetworkContext_t * pxNetworkContext )
+TlsTransportStatus_t connectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials, NetworkContext_t * pxNetworkContext )
 {
     TlsTransportStatus_t xNetworkStatus;
     BackoffAlgorithmStatus_t xBackoffAlgStatus = BackoffAlgorithmSuccess;
