@@ -31,6 +31,8 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 
+# Makefile path
+MAKEFILE_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
 ######################################
 # source
@@ -145,11 +147,6 @@ FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorit
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c
 
-# MBed tls
-C_SOURCES += \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/mbedtls_bio_tcp_sockets_wrapper.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_mbedtls.c
-
 # ASM sources
 ASM_SOURCES =  \
 startup_stm32f779xx.s
@@ -242,16 +239,9 @@ C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
 -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include
 
-# MBed tls
+# wolfssl
 C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include
-# -IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/include \
--IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport \
--IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
--IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include \
--IFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/library \
--IFreeRTOS/FreeRTOS-Plus/Source/corePKCS11/source/include \
--IFreeRTOS/FreeRTOS-Plus/ThirdParty/wolfSSL/wolfssl/wolfcrypt
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -273,12 +263,20 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 LDSCRIPT = STM32F779NIHx_FLASH.ld
 
 # libraries
-LIBS = -lc -lm -lrdimon -lmbedtls -lmbedx509 -lmbedcrypto
+LIBS = -lc -lm -lrdimon
 LIBDIR = -LFreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls/library
 LDFLAGS = $(MCU) -specs=rdimon.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
+# wolfssl
+LIBS += -lwolfssl
+LIBDIR += -Llib/wolfssl/lib
+
+# mbedtls libs:
+# LIBS += -lmbedtls -lmbedx509 -lmbedcrypto
+# LIBDIR += -L
+
 # default action: build all
-all: mbedtls $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
 
 #######################################
@@ -308,10 +306,14 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@	
 	
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir $@
 
-mbedtls:
-	$(MAKE) -C FreeRTOS/FreeRTOS-Plus/ThirdParty/mbedtls CC="$(CC)" CFLAGS="$(CFLAGS)" 
+wolfssl_build:
+	mkdir -p lib/wolfssl/
+	cd wolfssl/ && ./configure --host=arm-non-eabi CC=arm-none-eabi-gcc AR=arm-none-eabi-ar STRIP=arm-none-eabi-strip RANLIB=arm-none-eabi-ranlib --prefix=$(MAKEFILE_DIR)lib/wolfssl CFLAGS="-march=armv8-a --specs=nosys.specs -DHAVE_PK_CALLBACKS -DWOLFSSL_USER_IO -DNO_WRITEV -DTIME_T_NOT_64BIT" --disable-filesystem --enable-fastmath --disable-shared
+	make -C wolfssl/
+	make install -C wolfssl/
+
 
 #######################################
 # clean up
