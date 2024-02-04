@@ -4,7 +4,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "app_mqtt.h"
+#include "demo_config.h"
 
 #include "core_mqtt.h"
 
@@ -43,7 +43,6 @@
 #define _MILLISECONDS_PER_SECOND                          ( 1000U )
 #define _MILLISECONDS_PER_TICK                            ( _MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
 
-
 static void prvMQTTDemoTask( void * pvParameters );
 static void prvCreateMQTTConnectionWithBroker( MQTTContext_t * pxMQTTContext,
                                                NetworkContext_t * pxNetworkContext );
@@ -61,14 +60,14 @@ static void prvTLSConnect( NetworkCredentials_t * pxNetworkCredentials,
                            NetworkContext_t * pxNetworkContext );
 static MQTTStatus_t prvProcessLoopWithTimeout( MQTTContext_t * pMqttContext,
                                                uint32_t ulTimeoutMs );
-
-
 static uint8_t ucSharedBuffer[ democonfigNETWORK_BUFFER_SIZE ];
+
 static uint32_t ulGlobalEntryTimeMs;
 static uint16_t usPublishPacketIdentifier;
 static uint16_t usSubscribePacketIdentifier;
 static uint16_t usUnsubscribePacketIdentifier;
-static MQTTFixedBuffer_t xBuffer = {
+static MQTTFixedBuffer_t xBuffer =
+{
     ucSharedBuffer,
     democonfigNETWORK_BUFFER_SIZE
 };
