@@ -53,6 +53,10 @@ Core/Src/stm32hal/stm32f7xx_hal_msp.c \
 Core/Src/stm32hal/stm32f7xx_hal_timebase_tim.c \
 Core/Src/stm32hal/system_stm32f7xx.c
 
+# wolfSSL
+C_SOURCES += \
+Core/Src/wolfssl/transport_wolfSSL.c
+
 # Drivers
 C_SOURCES += \
 Drivers/stm32f7xx_hal_driver/Src/stm32f7xx_hal_cortex.c \
@@ -145,11 +149,7 @@ FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/core_mqtt.c 
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c \
 FreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/backoff_algorithm.c \
 FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/tcp_sockets_wrapper.c \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_plaintext.c
-
-# wolfSSL
-C_SOURCES += \
-FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/transport_wolfSSL.c
+FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp/sockets_wrapper.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -241,13 +241,12 @@ C_INCLUDES += \
 -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/logging \
 -IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport \
 -IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/include \
+-IFreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/network_transport/tcp_sockets_wrapper/ports/freertos_plus_tcp \
 -IFreeRTOS/FreeRTOS-Plus/Source/Utilities/backoff_algorithm/source/include
 
 # wolfssl
 C_INCLUDES += \
 -Ilib/wolfssl/include
-#-Ilib/wolfssl/include/wolfssl/wolfcrypt
-#-Ilib/wolfssl/include/wolfssl/openssl
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

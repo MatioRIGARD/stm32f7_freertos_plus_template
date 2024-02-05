@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "FreeRTOS.h"
+#include "FreeRTOS_IP.h"
 #include "task.h"
 
 #include "app_mqtt.h"
@@ -30,16 +31,9 @@
     #define democonfigMQTT_BROKER_PORT    ( 8883 )
 #endif
 
-#define mqttexampleCONNACK_RECV_TIMEOUT_MS                ( 1000U )
 #define mqttexampleTOPIC                                  democonfigCLIENT_IDENTIFIER "/example/topic"
 #define mqttexampleMESSAGE                                "Hello World!"
 #define mqttexampleDELAY_BETWEEN_DEMO_ITERATIONS_TICKS    ( pdMS_TO_TICKS( 5000U ) )
-#define mqttexamplePROCESS_LOOP_TIMEOUT_MS                ( 2000U )
-#define mqttexampleKEEP_ALIVE_TIMEOUT_SECONDS             ( 60U )
-#define mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS          ( pdMS_TO_TICKS( 2000U ) )
-#define mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS         ( 1000U )
-#define mqttexampleOUTGOING_PUBLISH_RECORD_LEN            ( 15U )
-#define mqttexampleINCOMING_PUBLISH_RECORD_LEN            ( 15U )
 #define _MILLISECONDS_PER_SECOND                          ( 1000U )
 #define _MILLISECONDS_PER_TICK                            ( _MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
 
@@ -102,11 +96,11 @@ static void prvMQTTDemoTask( void * pvParameters )
     {
         LogInfo( ( "---------STARTING DEMO---------\r\n" ) );
 
-        if( xPlatformIsNetworkUp() == pdFALSE )
+        if( FreeRTOS_IsNetworkUp() == pdFALSE )
         {
             LogInfo( ( "Waiting for the network link up event..." ) );
 
-            while( xPlatformIsNetworkUp() == pdFALSE )
+            while( FreeRTOS_IsNetworkUp() == pdFALSE )
             {
                 vTaskDelay( pdMS_TO_TICKS( 1000U ) );
             }
