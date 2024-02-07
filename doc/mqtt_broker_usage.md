@@ -80,7 +80,6 @@ touch /path/to/passwordfile.pass
 mosquitto_passwd -c /path/to/passwordfile.pass user_name
 ```
 
-
 ## Configuration example
 
 For this example, I changed default port to 44444 port number, created a password file and added its path to my own conf file, and chage log destination:
@@ -139,4 +138,25 @@ To subscribe to a topic with this config:
 mosquitto_sub -h localhost -p 44444 -t test_topic -u "user02" -P "password2"
 ```
 
+## Double authentification
+
+An obvious reminder: NEVER use these repo keys in production and never commit your own keys on a repository! It's a huge vulnerability!
+
+The directory `certificate/` contains autosigned certificates used for the example. The script `generate_new_cert.sh` will generate new CA, server and client
+certificate for the example. You can modify the keys data by updating the conf files.
+
+In the directory `mosquitto/`, there are 3 scripts.
+
+To run the example, you have to run the scripts in this order in 3 different terminal:
+
+```bash
+# In shell 1
+test_run_mosquitto.sh
+# In shell 2
+test_sub_mosquitto.sh
+# In shell 3
+test_pub_mosquitto.sh
+```
+
+It will run the server with the config in `mosquitto/mosquitto.conf`, subscribe to the topic "test_topic" as "user02" with password "password2", and finaly publish a message on the topic "test_topic" as "user" with password "password". Then, you should see the message appear on the shell where you ran `test_sub_mosquitto.sh`.
 
