@@ -57,14 +57,14 @@
  *
  * @param[in] pSslContext The SSL context to initialize.
  */
-static void sslContextInit( SSLContext_t * pSslContext );
+// static void sslContextInit( SSLContext_t * pSslContext );
 
 /**
  * @brief Free the TLS structures in a network connection.
  *
  * @param[in] pSslContext The SSL context to free.
  */
-static void sslContextFree( SSLContext_t * pSslContext );
+// static void sslContextFree( SSLContext_t * pSslContext );
 
 /**
  * @brief Set up TLS on a TCP connection.
