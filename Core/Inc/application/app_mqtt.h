@@ -46,92 +46,80 @@ void vStartSimpleMQTTDemo( void );
 
 // WARNING!: This key is an example and have to be changed by your own key
 #define democonfigROOT_CA_PEM    "-----BEGIN CERTIFICATE-----\n" \
-    "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\n" \
+    "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\n" \
+    "I0Y/A9pMmPPWb/VEPBiN\n" \
     "-----END CERTIFICATE-----\n"
 
 // WARNING!: This key is an example and have to be changed by your own key
 #define democonfigCLIENT_CERTIFICATE_PEM    "-----BEGIN CERTIFICATE-----\n" \
-    "MIIEETCCAfkCFBzDWP+GS61J6WZ5WTTVL3HIVIXvMA0GCSqGSIb3DQEBCwUAMEUx\n" \
-    "CzAJBgNVBAYTAkZSMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRl\n" \
-    "cm5ldCBXaWRnaXRzIFB0eSBMdGQwHhcNMjQwMjA1MTgyOTEzWhcNMjUwMjA0MTgy\n" \
-    "OTEzWjBFMQswCQYDVQQGEwJGUjETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UE\n" \
-    "CgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOC\n" \
-    "AQ8AMIIBCgKCAQEA9KsqOQpX/dPPQWmAfJutK3NOeMm5zjF1zvgPeWPtYpgKJnTu\n" \
-    "h1O15iArXQ2bdABvD0YvJTlB5PtGa/vyvJg7F9/kY6M1OrXfYHcZGsw0i3CoSlk/\n" \
-    "uMDdnBhpOngEEwjH28/sJluahLm2/aqsUZr16y1BF2qvDM0Ro4TFba3crpPuKlJV\n" \
-    "Oh8z3laVwR+qGk1LmMc8LB5ImuSUvV8oBbzkAGetEhA3I9C6BetENW5XuOKMokQg\n" \
-    "Gqnn4CJHZO8fJTpOimtoDxoo9+n9J0Y/HahUaT51YWBnT+m3xrJb9APFfjHRiqNE\n" \
-    "brCJOZzr4dM17CI59kEFWfnPhbn1wo2V/WQ+EwIDAQABMA0GCSqGSIb3DQEBCwUA\n" \
-    "A4ICAQClZUTTsmDoZcPUDrw+zZwqzKalgLDMoCcxfw7F+71S2DvV9C4Pt4wRby3f\n" \
-    "ateH4Z2Cpz2qMR/272t0StU4MOXaGNnsSN/Fld8isLPGxJAgCEBnKOr+QaezJl4R\n" \
-    "WoycTnpwAw52kTDQa7OyXu+ROaqMHhxD/f97iacnr8MBzqqk+miIijlSfxUvUArh\n" \
-    "aj7yaSllUVHWEwfDPHwAL7dMyW+vVeVvjeSUAmZGYbFlUv6dI4LdpMs3CUkqh81O\n" \
-    "1mRi0LRTQj20sd57fMw87X9JlKQGXZbMbvnQw1d1xkOFeFt7KZp9gn+eF4ROLR1e\n" \
-    "oUU4pmNlGINgiH5Qx/CPu6AjIjdEqEexd4oeObW0DIcIzcEIA54xGsaqflhPHQY/\n" \
-    "eITqM7KMeJqn+ui67TMnh/2NSHQWKq7I+/J+K4fOOIXrTb5GKANJb42tKvL6lzT5\n" \
-    "F96njQ3MikeVajBvODWkNK+PJHs/VZPx3N86SJbhgo7DLSqSYH958QH3+lDvZomK\n" \
-    "+QnVo28a9B7V56TTFGEvCIKDyPdo/U7bJJsUkFFfiUxT7/akWVgeUT4KVT57pAQK\n" \
-    "AL8kPl7l2fC0aXwPEWiwX86jOrdVIK1sB7YyppJOjVC+4XKiQ91UUvmEgTwLe0AJ\n" \
-    "SBmxlrl6uOhn2Ozxv4m/SYsbyGYyqgJzwm234e+RsLK5zt8/9g==\n" \
+    "MIIDoDCCAogCFDDYP6c2AlsxlNofrpSHeSmuy8cuMA0GCSqGSIb3DQEBCwUAMIGJ\n" \
+    "MQswCQYDVQQGEwJGUjEOMAwGA1UECAwFU3RhdGUxDTALBgNVBAcMBENpdHkxDjAM\n" \
+    "BgNVBAoMBWNhT3JnMRIwEAYDVQQLDAljYU9yZ1VuaXQxFTATBgNVBAMMDDE5Mi4x\n" \
+    "NjguMC4xMTEgMB4GCSqGSIb3DQEJARYRZW1haWxAZXhhbXBsZS5jb20wHhcNMjQw\n" \
+    "MjA3MjA1NTQ3WhcNMjQwMzA4MjA1NTQ3WjCBjjELMAkGA1UEBhMCRlIxDjAMBgNV\n" \
+    "BAgMBVN0YXRlMQ0wCwYDVQQHDARDaXR5MQ8wDQYDVQQKDAZTZXJ2ZXIxFjAUBgNV\n" \
+    "BAsMDVNlcnZlck9yZ1VuaXQxFTATBgNVBAMMDDE5Mi4xNjguMC4xMTEgMB4GCSqG\n" \
+    "SIb3DQEJARYRZW1haWxAZXhhbXBsZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IB\n" \
+    "DwAwggEKAoIBAQDsR1Sv6BbhtpVK/BgrEoaRGqQQXPCylh/8uqr8HcQZHYEt09WU\n" \
+    "2SDVI10PluYXVZYKf463X2KEwrJ6z4CjgVLhTtSlWmicJ7gpOGkkRnPmqs4Jzhvj\n" \
+    "P5KIPt+rlBzbPOFvnu2vtgnDvtvNJHDmzOR2ZkwHK6Sd3qf6HxkhaX6rcnz74xpy\n" \
+    "PbPzGmAyuV3CiLYOq/4IqWz0bN7hUM1a5WjwfD6O53nXoMa+syCNMUpp0KUvQBBf\n" \
+    "4T0oW7Xh+sbW3Q91E+qUOYn+H32VxGYJSu+xM4ntznwRHjky9lRlszihr5EtCEDQ\n" \
+    "j65GDbcPmsw4u8GkqkKwphmwiGv9XgJ5wnDPAgMBAAEwDQYJKoZIhvcNAQELBQAD\n" \
+    "ggEBAJ0NONMS2yFpk0hYe6Jzqz8jSKmcnBp00KGIsfzToBksyjpuQmU6JwOZG32I\n" \
+    "bpHBgKgbH7+yFm63PgxJJ1ddeZ1BqECLBIfl5xTJD5O8yGDwRIw7o4Fw0zvsI7X8\n" \
+    "4ZTExe/dn7s/dCvzV1Pqaw5G2hbVuIJFnDD/myeMa+tGGFGSwRga/S4/OZ4/63B0\n" \
+    "e5G1yuxZTgpqVNJNGk65im0ak2UsIZDT6BP2XGdiAGLsBBlLOrtn3V2HnGgzuElP\n" \
+    "cofNmSEWurM8PbSAAe+8FGLbykX2pQ1BqZd/9QuhsmsdujQ5FPCmXeBGLmxcH4JU\n" \
+    "GHaEwN/KdM7Uuhugn439pQToxCs=\n" \
     "-----END CERTIFICATE-----\n"
 
 // WARNING!: This key is an example and have to be changed by your own key
 #define democonfigCLIENT_PRIVATE_KEY_PEM    "-----BEGIN RSA PRIVATE KEY-----\n" \
-    "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\n" \
+    "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\n" \
     "-----END RSA PRIVATE KEY-----\n"
-
 
 #define democonfigDEMO_STACKSIZE         configMINIMAL_STACK_SIZE
 
