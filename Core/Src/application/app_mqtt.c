@@ -93,7 +93,7 @@ static void prvMQTTDemoTask( void * pvParameters )
 
     for( ; ; )
     {
-        LogInfo( ( "---------STARTING DEMO---------\r\n" ) );
+        LogInfo( ( "---------STARTING DEMO---------" ) );
 
         if( FreeRTOS_IsNetworkUp() == pdFALSE )
         {

@@ -298,5 +298,55 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_HASH_MspInit(HASH_HandleTypeDef* hhash)
+{
+    /* Peripheral clock enable */
+    __HAL_RCC_HASH_CLK_ENABLE();
+    /* HASH interrupt Init */
+    HAL_NVIC_SetPriority(HASH_RNG_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(HASH_RNG_IRQn);
+}
+
+void HAL_HASH_MspDeInit(HASH_HandleTypeDef* hhash)
+{
+    __HAL_RCC_HASH_CLK_DISABLE();
+}
+
+void HAL_RNG_MspInit(RNG_HandleTypeDef* hrng)
+{
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+  if(hrng->Instance==RNG)
+  {
+  /** Initializes the peripherals clock */
+    PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_CLK48;
+    PeriphClkInitStruct.Clk48ClockSelection = RCC_CLK48SOURCE_PLL;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    /* Peripheral clock enable */
+    __HAL_RCC_RNG_CLK_ENABLE();
+    /* RNG interrupt Init */
+    HAL_NVIC_SetPriority(HASH_RNG_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(HASH_RNG_IRQn);
+  }
+}
+
+void HAL_RNG_MspDeInit(RNG_HandleTypeDef* hrng)
+{
+  if(hrng->Instance==RNG)
+  {
+    /* Peripheral clock disable */
+    __HAL_RCC_RNG_CLK_DISABLE();
+    /* RNG interrupt DeInit */
+    /**
+    * Uncomment the line below to disable the "HASH_RNG_IRQn" interrupt
+    * Be aware, disabling shared interrupt may affect other IPs
+    */
+    /* HAL_NVIC_DisableIRQ(HASH_RNG_IRQn); */
+  }
+}
+
 
 /* USER CODE END 1 */

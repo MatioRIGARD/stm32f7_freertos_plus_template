@@ -22,7 +22,7 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
 
     char ipAddressBuffer[20];
     FreeRTOS_inet_ntoa( pxNetworkEndPoints->xDHCPData.ulOfferedIPAddress, ipAddressBuffer );
-    vLoggingPrintf("\nIP address: %s\n\n", ipAddressBuffer);
+    vLoggingPrintf("IP address: %s\n", ipAddressBuffer);
 
     if( eNetworkEvent == eNetworkUp )
     {
@@ -75,7 +75,7 @@ void vLoggingPrintf( const char * pcFormat, ... )
 	HAL_UART_Transmit(&huart1, final_string, final_length, HAL_MAX_DELAY);
 
 	free(final_string);
-    HAL_UART_Transmit(&huart1, (const uint8_t*)"\r", 2, HAL_MAX_DELAY);
+    HAL_UART_Transmit(&huart1, (const uint8_t*)"\r\n", 2, HAL_MAX_DELAY);
 }
 
 void vApplicationMallocFailedHook()
