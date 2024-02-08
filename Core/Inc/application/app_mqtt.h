@@ -29,7 +29,7 @@
 #endif
 
 extern void vLoggingPrintf( const char * pcFormatString, ... );
-void vStartSimpleMQTTDemo( void );
+void app_initMqtt( void );
 
 #ifndef SdkLog
     #define SdkLog( message )    vLoggingPrintf message

@@ -20,6 +20,10 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent ) {
     (void) eNetworkEvent;
     static BaseType_t xTasksAlreadyCreated = pdFALSE;
 
+    char ipAddressBuffer[20];
+    FreeRTOS_inet_ntoa( pxNetworkEndPoints->xDHCPData.ulOfferedIPAddress, ipAddressBuffer );
+    vLoggingPrintf("\nIP address: %s\n\n", ipAddressBuffer);
+
     if( eNetworkEvent == eNetworkUp )
     {
         if( xTasksAlreadyCreated == pdFALSE )

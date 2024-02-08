@@ -11,7 +11,6 @@ int main(void)
 	app_halInit();
 	osKernelInitialize();
 	app_initNetwork();
-	vStartSimpleMQTTDemo();
 	// app_initMqtt();
 	app_initTasks();
 	

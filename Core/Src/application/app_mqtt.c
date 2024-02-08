@@ -68,7 +68,7 @@ static MQTTFixedBuffer_t xBuffer = {
 static MQTTPubAckInfo_t pOutgoingPublishRecords[ mqttexampleOUTGOING_PUBLISH_RECORD_LEN ];
 static MQTTPubAckInfo_t pIncomingPublishRecords[ mqttexampleINCOMING_PUBLISH_RECORD_LEN ];
 
-void vStartSimpleMQTTDemo( void )
+void app_initMqtt( void )
 {
     xTaskCreate( prvMQTTDemoTask,          /* Function that implements the task. */
                  "MQTTDemo",               /* Text name for the task - only used for debugging. */
