@@ -31,8 +31,7 @@
     #define democonfigMQTT_BROKER_PORT    ( 8883 )
 #endif
 
-#define mqttexampleTOPIC                                  democonfigCLIENT_IDENTIFIER "/example/topic"
-#define mqttexampleMESSAGE                                "Hello World!"
+#define mqttexampleTOPIC                                  democonfigCLIENT_IDENTIFIER "/test_topic"
 #define mqttexampleDELAY_BETWEEN_DEMO_ITERATIONS_TICKS    ( pdMS_TO_TICKS( 5000U ) )
 #define _MILLISECONDS_PER_SECOND                          ( 1000U )
 #define _MILLISECONDS_PER_TICK                            ( _MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
@@ -210,6 +209,7 @@ static void prvCreateMQTTConnectionWithBroker( MQTTContext_t * pxMQTTContext,
     xConnectInfo.cleanSession = true;
 
     xConnectInfo.pClientIdentifier = democonfigCLIENT_IDENTIFIER;
+    xConnectInfo.pPassword = democonfigCLIENT_PASSWORD;
     xConnectInfo.clientIdentifierLength = ( uint16_t ) strlen( democonfigCLIENT_IDENTIFIER );
 
     xConnectInfo.keepAliveSeconds = mqttexampleKEEP_ALIVE_TIMEOUT_SECONDS;

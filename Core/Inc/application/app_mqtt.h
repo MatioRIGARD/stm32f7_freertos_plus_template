@@ -12,7 +12,7 @@
 #define mqttexampleINCOMING_PUBLISH_RECORD_LEN              (15U)
 #define mqttexampleKEEP_ALIVE_TIMEOUT_SECONDS               (60U)
 #define mqttexampleCONNACK_RECV_TIMEOUT_MS                  (1000U)
-#define mqttexampleMESSAGE                                  "Hello World!"
+#define mqttexampleMESSAGE                                  ("Hello World!")
 #define mqttexamplePROCESS_LOOP_TIMEOUT_MS                  (2000U)
 #define mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS            (pdMS_TO_TICKS (2000U))
 
@@ -37,7 +37,8 @@ void vStartSimpleMQTTDemo( void );
 
 #include "logging_stack.h"
 
-#define democonfigCLIENT_IDENTIFIER    "insert here."
+#define democonfigCLIENT_IDENTIFIER    "user01"
+#define democonfigCLIENT_PASSWORD       "password"
 
 #define democonfigMQTT_BROKER_ENDPOINT                      "192.168.0.11"
 #define democonfigMQTT_BROKER_PORT                          ((uint16_t) 44444)
