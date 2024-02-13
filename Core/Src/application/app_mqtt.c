@@ -8,6 +8,7 @@
 #include "app_mqtt.h"
 
 #include "core_mqtt.h"
+#include "cmsis_os2.h"
 
 #include "transport_wolfSSL.h"
 
@@ -74,7 +75,7 @@ void app_initMqtt( void )
                  "MQTTDemo",               /* Text name for the task - only used for debugging. */
                  democonfigDEMO_STACKSIZE, /* Size of stack (in words, not bytes) to allocate for the task. */
                  NULL,                     /* Task parameter - not used in this case. */
-                 tskIDLE_PRIORITY,         /* Task priority, must be between 0 and configMAX_PRIORITIES - 1. */
+                 (osPriority_t)osPriorityIdle,         /* Task priority, must be between 0 and configMAX_PRIORITIES - 1. */
                  NULL );                   /* Used to pass out a handle to the created task - not used in this case. */
 }
 

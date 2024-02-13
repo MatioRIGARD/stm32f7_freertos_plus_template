@@ -122,7 +122,7 @@ void app_initMqtt( void );
     "WiTosjnM6AcvdTs2rhYfQLuftABVR+dlODIHMByUBBb1sgALJV78qQ==\n" \
     "-----END RSA PRIVATE KEY-----\n"
 
-#define democonfigDEMO_STACKSIZE         configMINIMAL_STACK_SIZE
+#define democonfigDEMO_STACKSIZE         configMINIMAL_STACK_SIZE*4
 
 #define democonfigNETWORK_BUFFER_SIZE    ( 1024U )
 
